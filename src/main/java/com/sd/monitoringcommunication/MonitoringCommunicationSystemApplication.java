@@ -22,8 +22,8 @@ public class MonitoringCommunicationSystemApplication {
 	CommandLineRunner commandLineRunner(KafkaTemplate<String, MessageDTO> kafkaTemplate) {
 		return args -> {
 			for (int i = 0; i < 1000; i++) {
-				kafkaTemplate.send("device", new MessageDTO("vladradu", "bec", LocalDateTime.now(), (float) (Math.round((Math.random() * 9_00) + 100) / 100.0) ));
-				kafkaTemplate.send("device", new MessageDTO("dumitruradu", "altbec", LocalDateTime.now(), (float) (Math.round((Math.random() * 9_00) + 100) / 100.0) ));
+				kafkaTemplate.send("monitoring", new MessageDTO("vladradu", "bec", LocalDateTime.now(), (float) (Math.round((Math.random() * 9_00) + 100) / 100.0) ));
+				kafkaTemplate.send("monitoring", new MessageDTO("dumitruradu", "altbec", LocalDateTime.now(), (float) (Math.round((Math.random() * 9_00) + 100) / 100.0) ));
 				sleep(3000);
 			}
 		};

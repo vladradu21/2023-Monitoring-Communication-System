@@ -20,6 +20,6 @@ public class MessageController {
 
     @PostMapping
     public void publish(@RequestBody MessageDTO messageDTO) {
-        kafkaTemplate.send("device", messageDTO);
+        kafkaTemplate.send("monitoring", messageDTO);
     }
 }

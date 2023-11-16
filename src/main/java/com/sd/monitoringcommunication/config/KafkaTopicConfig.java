@@ -9,6 +9,12 @@ import org.springframework.kafka.config.TopicBuilder;
 public class KafkaTopicConfig {
 
     @Bean
+    public NewTopic monitoringTopic() {
+        return TopicBuilder.name("monitoring")
+                .build();
+    }
+
+    @Bean
     public NewTopic deviceTopic() {
         return TopicBuilder.name("device")
                 .build();

@@ -1,5 +1,6 @@
 package com.sd.monitoringcommunication.config;
 
+import com.sd.monitoringcommunication.dto.DeviceUpdateDTO;
 import com.sd.monitoringcommunication.dto.MessageDTO;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -30,9 +31,8 @@ public class KafkaConsumerConfig {
         return props;
     }
 
-    @Bean
-    public ConsumerFactory<String, MessageDTO> consumerFactory() {
-        JsonDeserializer<MessageDTO> deserializer = new JsonDeserializer<>(MessageDTO.class);
+    private <T> ConsumerFactory<String, T> createConsumerFactory(Class<T> targetType) {
+        JsonDeserializer<T> deserializer = new JsonDeserializer<>(targetType, false);
         deserializer.addTrustedPackages("*");
 
         return new DefaultKafkaConsumerFactory<>(
@@ -42,12 +42,22 @@ public class KafkaConsumerConfig {
         );
     }
 
-    @Bean
-    public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, MessageDTO>> listenerContainerFactory(
-            ConsumerFactory<String, MessageDTO> consumerFactory
-    ){
-        ConcurrentKafkaListenerContainerFactory<String, MessageDTO> factory = new ConcurrentKafkaListenerContainerFactory<>();
-        factory.setConsumerFactory(consumerFactory);
+    private <T> KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, T>>
+    createListenerContainerFactory(Class<T> targetType) {
+        ConcurrentKafkaListenerContainerFactory<String, T> factory = new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConsumerFactory(createConsumerFactory(targetType));
         return factory;
+    }
+
+    @Bean
+    public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, MessageDTO>>
+    monitoringListenerContainerFactory() {
+        return createListenerContainerFactory(MessageDTO.class);
+    }
+
+    @Bean
+    public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, DeviceUpdateDTO>>
+    deviceListenerContainerFactory() {
+        return createListenerContainerFactory(DeviceUpdateDTO.class);
     }
 }
