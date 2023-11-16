@@ -7,11 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class EnergyConsumptionService {
+public class MaxConsumptionService {
     private final EnergyConsumptionRepository energyConsumptionRepository;
 
     @Autowired
-    public EnergyConsumptionService(EnergyConsumptionRepository energyConsumptionRepository) {
+    public MaxConsumptionService(EnergyConsumptionRepository energyConsumptionRepository) {
         this.energyConsumptionRepository = energyConsumptionRepository;
     }
 
