@@ -7,7 +7,7 @@ public record MessageDTO(
         String username,
         String device,
         LocalDateTime time,
-        float consumption
+        double consumption
 ) {
     @Override
     public String toString() {
