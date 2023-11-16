@@ -1,10 +1,13 @@
 package com.sd.monitoringcommunication;
 
+import com.sd.monitoringcommunication.dto.MessageDTO;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.kafka.core.KafkaTemplate;
+
+import java.time.LocalDateTime;
 
 import static java.lang.Thread.sleep;
 
@@ -16,11 +19,12 @@ public class MonitoringCommunicationSystemApplication {
 	}
 
 	@Bean
-	CommandLineRunner commandLineRunner(KafkaTemplate<String, String> kafkaTemplate) {
+	CommandLineRunner commandLineRunner(KafkaTemplate<String, MessageDTO> kafkaTemplate) {
 		return args -> {
 			for (int i = 0; i < 1000; i++) {
-				kafkaTemplate.send("device", "Hello, World!" + i);
-				sleep(1000);
+				kafkaTemplate.send("device", new MessageDTO("vladradu", "bec", LocalDateTime.now(), (float) (Math.round((Math.random() * 9_00) + 100) / 100.0) ));
+				kafkaTemplate.send("device", new MessageDTO("dumitruradu", "altbec", LocalDateTime.now(), (float) (Math.round((Math.random() * 9_00) + 100) / 100.0) ));
+				sleep(3000);
 			}
 		};
 	}

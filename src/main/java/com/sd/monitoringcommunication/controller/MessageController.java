@@ -11,15 +11,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/messages")
 public class MessageController {
-    private final KafkaTemplate<String, String> kafkaTemplate;
+    private final KafkaTemplate<String, MessageDTO> kafkaTemplate;
 
     @Autowired
-    public MessageController(KafkaTemplate<String, String> kafkaTemplate) {
+    public MessageController(KafkaTemplate<String, MessageDTO> kafkaTemplate) {
         this.kafkaTemplate = kafkaTemplate;
     }
 
     @PostMapping
     public void publish(@RequestBody MessageDTO messageDTO) {
-        kafkaTemplate.send("device", messageDTO.message());
+        kafkaTemplate.send("device", messageDTO);
     }
 }
