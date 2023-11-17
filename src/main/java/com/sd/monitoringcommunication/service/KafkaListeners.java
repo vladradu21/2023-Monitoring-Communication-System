@@ -2,12 +2,9 @@ package com.sd.monitoringcommunication.service;
 
 import com.sd.monitoringcommunication.dto.DeviceUpdateDTO;
 import com.sd.monitoringcommunication.dto.MessageDTO;
-import com.sd.monitoringcommunication.model.EnergyConsumption;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
-
-import java.time.LocalDateTime;
 
 @Component
 public class KafkaListeners {

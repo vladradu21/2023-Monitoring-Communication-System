@@ -15,7 +15,7 @@ public class MaxConsumptionService {
         this.energyConsumptionRepository = energyConsumptionRepository;
     }
 
-    void updateEnergyConsumption(DeviceUpdateDTO data) {
+    public void updateEnergyConsumption(DeviceUpdateDTO data) {
         energyConsumptionRepository.findByUsernameAndDeviceName(data.username(), data.deviceName())
                 .ifPresentOrElse(
                         energyConsumption -> {
