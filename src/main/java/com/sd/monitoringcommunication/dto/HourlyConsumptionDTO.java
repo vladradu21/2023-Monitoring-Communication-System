@@ -1,12 +1,16 @@
 package com.sd.monitoringcommunication.dto;
 
-public record EnergyConsumptionDTO(
+import java.time.LocalDateTime;
+
+public record HourlyConsumptionDTO(
         String username,
 
         String deviceName,
 
         double averageConsumption,
 
-        double maxConsumption
+        LocalDateTime startTime,
+
+        LocalDateTime currentTime
 ) {
 }
