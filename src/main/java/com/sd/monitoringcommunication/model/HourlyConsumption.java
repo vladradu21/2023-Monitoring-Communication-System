@@ -30,23 +30,17 @@ public class HourlyConsumption {
 
     private double averageConsumption;
 
-    /*@Column(name = "start_time")
+    @Column(name = "start_time")
     LocalDateTime startTime;
 
-    @Column(name = "current_time")
-    LocalDateTime currentTime;
+    @Column(name = "end_time")
+    LocalDateTime endTime;
 
-    public HourlyConsumption(String username, String deviceName, double averageConsumption, LocalDateTime startTime, LocalDateTime currentTime) {
+    public HourlyConsumption(String username, String deviceName, double averageConsumption, LocalDateTime startTime, LocalDateTime endTime) {
         this.username = username;
         this.deviceName = deviceName;
         this.averageConsumption = averageConsumption;
         this.startTime = startTime;
-        this.currentTime = currentTime;
-    }*/
-
-    public HourlyConsumption(String username, String deviceName, double averageConsumption) {
-        this.username = username;
-        this.deviceName = deviceName;
-        this.averageConsumption = averageConsumption;
+        this.endTime = endTime;
     }
 }

@@ -48,7 +48,7 @@ public class MonitoringService {
                             .mapToDouble(MessageDTO::consumption)
                             .sum();
                     hourlyConsumptionRepository.save(
-                            new HourlyConsumption(username, device, hourlyConsumption)
+                            new HourlyConsumption(username, device, hourlyConsumption, oneHourAgo, currentDateTime)
                     );
                     handleConsumption(
                             new HourlyConsumptionDTO(username, device, hourlyConsumption, oneHourAgo, currentDateTime)
