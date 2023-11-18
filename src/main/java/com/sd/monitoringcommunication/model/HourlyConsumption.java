@@ -1,5 +1,6 @@
 package com.sd.monitoringcommunication.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -9,12 +10,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @Entity
-@Table(name = "energy_consumption")
-public class EnergyConsumption {
+@Table(name = "hourly_consumption")
+public class HourlyConsumption {
     @Id
     @GeneratedValue
     private Integer id;
@@ -27,19 +30,23 @@ public class EnergyConsumption {
 
     private double averageConsumption;
 
-    private double maxConsumption;
+    /*@Column(name = "start_time")
+    LocalDateTime startTime;
 
-    public EnergyConsumption(String username, String deviceName, double maxConsumption) {
+    @Column(name = "current_time")
+    LocalDateTime currentTime;
+
+    public HourlyConsumption(String username, String deviceName, double averageConsumption, LocalDateTime startTime, LocalDateTime currentTime) {
         this.username = username;
         this.deviceName = deviceName;
-        this.maxConsumption = maxConsumption;
-    }
+        this.averageConsumption = averageConsumption;
+        this.startTime = startTime;
+        this.currentTime = currentTime;
+    }*/
 
-    public EnergyConsumption(String username, String deviceName, double averageConsumption, boolean consumption) {
+    public HourlyConsumption(String username, String deviceName, double averageConsumption) {
         this.username = username;
         this.deviceName = deviceName;
-        if (consumption) {
-            this.averageConsumption = averageConsumption;
-        }
+        this.averageConsumption = averageConsumption;
     }
 }

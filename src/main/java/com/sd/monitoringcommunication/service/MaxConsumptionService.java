@@ -1,34 +1,34 @@
 package com.sd.monitoringcommunication.service;
 
 import com.sd.monitoringcommunication.dto.DeviceUpdateDTO;
-import com.sd.monitoringcommunication.model.EnergyConsumption;
-import com.sd.monitoringcommunication.repository.EnergyConsumptionRepository;
+import com.sd.monitoringcommunication.model.MaxConsumption;
+import com.sd.monitoringcommunication.repository.MaxConsumptionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class MaxConsumptionService {
-    private final EnergyConsumptionRepository energyConsumptionRepository;
+    private final MaxConsumptionRepository maxConsumptionRepository;
 
     @Autowired
-    public MaxConsumptionService(EnergyConsumptionRepository energyConsumptionRepository) {
-        this.energyConsumptionRepository = energyConsumptionRepository;
+    public MaxConsumptionService(MaxConsumptionRepository maxConsumptionRepository) {
+        this.maxConsumptionRepository = maxConsumptionRepository;
     }
 
     public void updateEnergyConsumption(DeviceUpdateDTO data) {
-        energyConsumptionRepository.findByUsernameAndDeviceName(data.username(), data.deviceName())
+        maxConsumptionRepository.findByUsernameAndDeviceName(data.username(), data.deviceName())
                 .ifPresentOrElse(
                         energyConsumption -> {
                             energyConsumption.setMaxConsumption(data.maxConsumption());
-                            energyConsumptionRepository.save(energyConsumption);
+                            maxConsumptionRepository.save(energyConsumption);
                         },
                         () -> {
-                            EnergyConsumption energyConsumption = new EnergyConsumption(
+                            MaxConsumption maxConsumption = new MaxConsumption(
                                     data.username(),
                                     data.deviceName(),
                                     data.maxConsumption()
                             );
-                            energyConsumptionRepository.save(energyConsumption);
+                            maxConsumptionRepository.save(maxConsumption);
                         }
                 );
     }
