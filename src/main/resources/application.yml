@@ -9,7 +9,7 @@ spring:
     name: monitoring-communication
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/monitoringdb
+    url: jdbc:mysql://${DB_IP:localhost}:3306/monitoringdb
     username: root
     password: admin
   jpa:
