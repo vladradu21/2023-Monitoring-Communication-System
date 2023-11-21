@@ -3,7 +3,7 @@ package com.sd.monitoringcommunication.dto;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public record MessageDTO(
+public record MonitoringMessageDTO(
         String username,
         String device,
         LocalDateTime time,

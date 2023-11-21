@@ -1,7 +1,7 @@
 package com.sd.monitoringcommunication.service;
 
 import com.sd.monitoringcommunication.dto.HourlyConsumptionDTO;
-import com.sd.monitoringcommunication.dto.MessageDTO;
+import com.sd.monitoringcommunication.dto.MonitoringMessageDTO;
 import com.sd.monitoringcommunication.model.HourlyConsumption;
 import com.sd.monitoringcommunication.repository.HourlyConsumptionRepository;
 import com.sd.monitoringcommunication.repository.MaxConsumptionRepository;
@@ -17,7 +17,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 public class MonitoringService {
-    private final Map<String, Map<String, List<MessageDTO>>> userDeviceConsumptions = new ConcurrentHashMap<>();
+    private final Map<String, Map<String, List<MonitoringMessageDTO>>> userDeviceConsumptions = new ConcurrentHashMap<>();
     private final HourlyConsumptionRepository hourlyConsumptionRepository;
     private final MaxConsumptionRepository maxConsumptionRepository;
 
@@ -27,7 +27,7 @@ public class MonitoringService {
         this.maxConsumptionRepository = maxConsumptionRepository;
     }
 
-    public void handleMessage(MessageDTO data) {
+    public void handleMessage(MonitoringMessageDTO data) {
         userDeviceConsumptions
                 .computeIfAbsent(data.username(), k -> new ConcurrentHashMap<>())
                 .computeIfAbsent(data.device(), k -> new ArrayList<>())
@@ -45,7 +45,7 @@ public class MonitoringService {
                             .filter(entry ->
                                     entry.time().isAfter(oneHourAgo) && entry.time().isBefore(currentDateTime)
                             )
-                            .mapToDouble(MessageDTO::consumption)
+                            .mapToDouble(MonitoringMessageDTO::consumption)
                             .sum();
                     hourlyConsumptionRepository.save(
                             new HourlyConsumption(username, device, hourlyConsumption, oneHourAgo, currentDateTime)

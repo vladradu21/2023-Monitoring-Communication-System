@@ -1,7 +1,7 @@
 package com.sd.monitoringcommunication.config;
 
 import com.sd.monitoringcommunication.dto.DeviceUpdateDTO;
-import com.sd.monitoringcommunication.dto.MessageDTO;
+import com.sd.monitoringcommunication.dto.MonitoringMessageDTO;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -50,9 +50,9 @@ public class KafkaConsumerConfig {
     }
 
     @Bean
-    public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, MessageDTO>>
+    public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, MonitoringMessageDTO>>
     monitoringListenerContainerFactory() {
-        return createListenerContainerFactory(MessageDTO.class);
+        return createListenerContainerFactory(MonitoringMessageDTO.class);
     }
 
     @Bean
