@@ -1,7 +1,9 @@
 package com.sd.monitoringcommunication.service;
 
+import com.sd.monitoringcommunication.config.MyWebSocketHandler;
 import com.sd.monitoringcommunication.dto.HourlyConsumptionDTO;
 import com.sd.monitoringcommunication.dto.MonitoringMessageDTO;
+import com.sd.monitoringcommunication.dto.NotificationDTO;
 import com.sd.monitoringcommunication.model.HourlyConsumption;
 import com.sd.monitoringcommunication.repository.HourlyConsumptionRepository;
 import com.sd.monitoringcommunication.repository.MaxConsumptionRepository;
@@ -20,11 +22,13 @@ public class MonitoringService {
     private final Map<String, Map<String, List<MonitoringMessageDTO>>> userDeviceConsumptions = new ConcurrentHashMap<>();
     private final HourlyConsumptionRepository hourlyConsumptionRepository;
     private final MaxConsumptionRepository maxConsumptionRepository;
+    private final MyWebSocketHandler myWebSocketHandler;
 
     @Autowired
-    public MonitoringService(HourlyConsumptionRepository hourlyConsumptionRepository, MaxConsumptionRepository maxConsumptionRepository) {
+    public MonitoringService(HourlyConsumptionRepository hourlyConsumptionRepository, MaxConsumptionRepository maxConsumptionRepository, MyWebSocketHandler myWebSocketHandler) {
         this.hourlyConsumptionRepository = hourlyConsumptionRepository;
         this.maxConsumptionRepository = maxConsumptionRepository;
+        this.myWebSocketHandler = myWebSocketHandler;
     }
 
     public void handleMessage(MonitoringMessageDTO data) {
@@ -43,8 +47,7 @@ public class MonitoringService {
                 devices.forEach((device, dataList) -> {
                     double hourlyConsumption = dataList.stream()
                             .filter(entry ->
-                                    entry.time().isAfter(oneHourAgo) && entry.time().isBefore(currentDateTime)
-                            )
+                                    entry.time().isAfter(oneHourAgo) && entry.time().isBefore(currentDateTime))
                             .mapToDouble(MonitoringMessageDTO::consumption)
                             .sum();
                     hourlyConsumptionRepository.save(
@@ -59,14 +62,26 @@ public class MonitoringService {
 
     private void handleConsumption(HourlyConsumptionDTO consumptionDTO) {
         System.out.println(consumptionDTO);
-
         maxConsumptionRepository.findByUsernameAndDeviceName(consumptionDTO.username(), consumptionDTO.deviceName())
                 .ifPresent(maxConsumption -> {
                     if (consumptionDTO.averageConsumption() > maxConsumption.getMaxConsumption()) {
-                        System.out.println(
-                                "Consumption for " + consumptionDTO.username()
-                                        + " " + consumptionDTO.deviceName() + " is higher than max consumption");
+                        sendNotification(consumptionDTO);
                     }
                 });
+    }
+
+    private void sendNotification(HourlyConsumptionDTO consumptionDTO) {
+        NotificationDTO notificationDTO = new NotificationDTO(
+                "Consumption allert for user: " + consumptionDTO.username()
+                        + " and device: " + consumptionDTO.deviceName(),
+                "Max consumption exceeded: " + consumptionDTO.averageConsumption()
+        );
+
+        System.out.println(notificationDTO);
+        try {
+            myWebSocketHandler.sendNotificationToSession(notificationDTO);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
