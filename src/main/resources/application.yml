@@ -17,4 +17,13 @@ spring:
       ddl-auto: update
     database-platform: org.hibernate.dialect.MySQLDialect
   kafka:
-    bootstrap-servers: localhost:9092
+    bootstrap-servers: pkc-7xoy1.eu-central-1.aws.confluent.cloud:9092
+    properties:
+      bootstrap:
+        servers: pkc-7xoy1.eu-central-1.aws.confluent.cloud:9092
+      sasl:
+        jaas:
+          config: org.apache.kafka.common.security.plain.PlainLoginModule required username='VROSUZ57EQREH2KS' password='cPbRZ+qMcKi3vU5PmX/Nwu30TcCraQF6X4eLuTF0E9q+2tncbWp0+ZqeMfxGcXaz';
+        mechanism: PLAIN
+      security:
+        protocol: SASL_SSL
