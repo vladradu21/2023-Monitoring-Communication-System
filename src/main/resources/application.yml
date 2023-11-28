@@ -18,6 +18,14 @@ spring:
     database-platform: org.hibernate.dialect.MySQLDialect
   kafka:
     bootstrap-servers: pkc-7xoy1.eu-central-1.aws.confluent.cloud:9092
+    consumer:
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring:
+          json:
+            trusted:
+              packages: "com.sd.datasimulator.dto"
     properties:
       bootstrap:
         servers: pkc-7xoy1.eu-central-1.aws.confluent.cloud:9092

@@ -17,13 +17,13 @@ public class KafkaListeners {
         this.monitoringService = monitoringService;
     }
 
-    @KafkaListener(topics = "monitoring", groupId = "m_group", containerFactory = "monitoringListenerContainerFactory")
+    @KafkaListener(topics = "monitoring", groupId = "m_group")
     void monitoringListener(MonitoringMessageDTO data) {
         System.out.println("monitoring: " + data);
         monitoringService.handleMessage(data);
     }
 
-    @KafkaListener(topics = "device", groupId = "d_group", containerFactory = "deviceListenerContainerFactory")
+    @KafkaListener(topics = "device", groupId = "d_group")
     void deviceListener(DeviceUpdateDTO data) {
         System.out.println("device updates: " + data);
         maxConsumptionService.updateEnergyConsumption(data);
