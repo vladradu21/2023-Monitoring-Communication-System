@@ -40,7 +40,7 @@ public class MonitoringService {
 
     @Scheduled(fixedDelay = 60000)
     public void calculateHourlyConsumption() {
-        LocalDateTime currentDateTime = LocalDateTime.now();
+        LocalDateTime currentDateTime = LocalDateTime.now().plusHours(2);
         LocalDateTime oneHourAgo = currentDateTime.minusHours(1).minusMinutes(1);
 
         userDeviceConsumptions.forEach((username, devices) ->
@@ -61,7 +61,6 @@ public class MonitoringService {
     }
 
     private void handleConsumption(HourlyConsumptionDTO consumptionDTO) {
-        System.out.println(consumptionDTO);
         maxConsumptionRepository.findByUsernameAndDeviceName(consumptionDTO.username(), consumptionDTO.deviceName())
                 .ifPresent(maxConsumption -> {
                     if (consumptionDTO.averageConsumption() > maxConsumption.getMaxConsumption()) {
