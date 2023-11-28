@@ -1,6 +1,8 @@
 package com.sd.monitoringcommunication.service;
 
-import com.sd.monitoringcommunication.dto.DeviceUpdateDTO;
+import com.sd.datasimulator.dto.MessageDTO;
+import com.sd.devicemanagement.dto.DeviceUpdateDTO;
+import com.sd.monitoringcommunication.dto.DeviceUpdatesDTO;
 import com.sd.monitoringcommunication.dto.MonitoringMessageDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -18,14 +20,16 @@ public class KafkaListeners {
     }
 
     @KafkaListener(topics = "monitoring", groupId = "m_group")
-    void monitoringListener(MonitoringMessageDTO data) {
+    void monitoringListener(MessageDTO data) {
         System.out.println("monitoring: " + data);
-        monitoringService.handleMessage(data);
+        MonitoringMessageDTO monitoringMessageDTO = new MonitoringMessageDTO(data.username(), data.device(), data.time(), data.consumption());
+        monitoringService.handleMessage(monitoringMessageDTO);
     }
 
     @KafkaListener(topics = "device", groupId = "d_group")
     void deviceListener(DeviceUpdateDTO data) {
         System.out.println("device updates: " + data);
-        maxConsumptionService.updateEnergyConsumption(data);
+        DeviceUpdatesDTO deviceUpdatesDTO = new DeviceUpdatesDTO(data.username(), data.deviceName(), data.maxConsumption());
+        maxConsumptionService.updateEnergyConsumption(deviceUpdatesDTO);
     }
 }

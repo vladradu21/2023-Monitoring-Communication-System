@@ -1,4 +1,4 @@
-package com.sd.monitoringcommunication.dto;
+package com.sd.devicemanagement.dto;
 
 public record DeviceUpdateDTO(
         String username,
