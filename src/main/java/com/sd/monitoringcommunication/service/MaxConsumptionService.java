@@ -1,6 +1,6 @@
 package com.sd.monitoringcommunication.service;
 
-import com.sd.monitoringcommunication.dto.DeviceUpdatesDTO;
+import com.sd.monitoringcommunication.dto.DeviceUpdateDTO;
 import com.sd.monitoringcommunication.model.MaxConsumption;
 import com.sd.monitoringcommunication.repository.MaxConsumptionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,7 @@ public class MaxConsumptionService {
         this.maxConsumptionRepository = maxConsumptionRepository;
     }
 
-    public void updateEnergyConsumption(DeviceUpdatesDTO data) {
+    public void updateEnergyConsumption(DeviceUpdateDTO data) {
         maxConsumptionRepository.findByUsernameAndDeviceName(data.username(), data.deviceName())
                 .ifPresentOrElse(
                         energyConsumption -> {

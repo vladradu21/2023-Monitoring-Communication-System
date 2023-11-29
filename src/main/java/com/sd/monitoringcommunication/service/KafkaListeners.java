@@ -1,9 +1,10 @@
 package com.sd.monitoringcommunication.service;
 
-import com.sd.datasimulator.dto.MessageDTO;
-import com.sd.devicemanagement.dto.DeviceUpdateDTO;
-import com.sd.monitoringcommunication.dto.DeviceUpdatesDTO;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.sd.monitoringcommunication.dto.DeviceUpdateDTO;
 import com.sd.monitoringcommunication.dto.MonitoringMessageDTO;
+import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Component;
 public class KafkaListeners {
     private final MaxConsumptionService maxConsumptionService;
     private final MonitoringService monitoringService;
+    private final ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
 
     @Autowired
     public KafkaListeners(MaxConsumptionService maxConsumptionService, MonitoringService monitoringService) {
@@ -20,16 +22,16 @@ public class KafkaListeners {
     }
 
     @KafkaListener(topics = "monitoring", groupId = "m_group")
-    void monitoringListener(MessageDTO data) {
-        System.out.println("monitoring: " + data);
-        MonitoringMessageDTO monitoringMessageDTO = new MonitoringMessageDTO(data.username(), data.device(), data.time(), data.consumption());
+    void monitoringListener(ConsumerRecord<?, ?> record) {
+        System.out.println("monitoring: " + record.value());
+        MonitoringMessageDTO monitoringMessageDTO = objectMapper.convertValue(record.value(), MonitoringMessageDTO.class);
         monitoringService.handleMessage(monitoringMessageDTO);
     }
 
     @KafkaListener(topics = "device", groupId = "d_group")
-    void deviceListener(DeviceUpdateDTO data) {
-        System.out.println("device updates: " + data);
-        DeviceUpdatesDTO deviceUpdatesDTO = new DeviceUpdatesDTO(data.username(), data.deviceName(), data.maxConsumption());
-        maxConsumptionService.updateEnergyConsumption(deviceUpdatesDTO);
+    void deviceListener(ConsumerRecord<?, ?> record) {
+        System.out.println("device updates: " + record.value());
+        DeviceUpdateDTO deviceUpdateDTO = objectMapper.convertValue(record.value(), DeviceUpdateDTO.class);
+        maxConsumptionService.updateEnergyConsumption(deviceUpdateDTO);
     }
 }
