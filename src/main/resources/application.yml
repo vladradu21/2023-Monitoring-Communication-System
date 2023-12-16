@@ -35,3 +35,7 @@ spring:
         mechanism: PLAIN
       security:
         protocol: SASL_SSL
+
+usermicroservice:
+  host: ${USER_HOST:localhost}
+  port: ${USER_PORT:8080}
